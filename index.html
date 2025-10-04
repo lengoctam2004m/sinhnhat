@@ -5,113 +5,83 @@
 <title>Happy Birthday 💖</title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <style>
-  body,html {
-    margin:0;padding:0;height:100%;width:100%;
-    font-family:'Segoe UI',sans-serif;background:#fdfdfd;
-    overflow:hidden;
-  }
+  body,html {margin:0;padding:0;height:100%;width:100%;font-family:'Segoe UI',sans-serif;overflow:hidden;}
 
-  /* === PASS SCREEN === */
-  #passScreen {
-    display:flex;justify-content:center;align-items:center;
-    height:100%;padding:20px;
+  /* PASS SCREEN */
+  #passScreen{
+    display:flex;justify-content:center;align-items:center;height:100%;
     background:linear-gradient(135deg,#ffe6ec,#ffd6f6);
   }
-  .pass-box {
-    display:flex;flex-direction:column;
-    max-width:90%;width:400px;
+  .pass-box{
+    display:flex;flex-direction:row;max-width:95%;width:650px;
+    border-radius:20px;overflow:hidden;background:#fff;
     box-shadow:0 8px 30px rgba(0,0,0,0.25);
-    border-radius:12px;overflow:hidden;background:#fff;
-    animation: fadeIn 1s ease;
   }
-  .pass-left {
-    background:#ffe6ec;display:flex;align-items:center;justify-content:center;
-    padding:15px;
+  .pass-left{flex:1;display:flex;align-items:center;justify-content:center;background:#ffe6ec;padding:20px;}
+  .pass-left img{
+    width:100%;max-width:250px;height:auto;border-radius:20px;border:8px solid #fff;
+    box-shadow:0 10px 25px rgba(0,0,0,0.35);object-fit:cover;
   }
-  .pass-left img {
-    width:150px;height:150px;border-radius:12px;object-fit:cover;
-    box-shadow:0 5px 20px rgba(0,0,0,0.2);
+  .pass-right{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+  .pass-right h2{font-size:20px;color:#ff4d88;margin:0 0 15px;text-align:center;}
+  .dots{font-size:26px;letter-spacing:12px;margin-bottom:20px;color:#ff4d88;}
+  .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:240px;}
+  .keypad button{
+    aspect-ratio:1/1;font-size:18px;font-weight:bold;border:none;border-radius:12px;
+    background:#f2f2f2;cursor:pointer;transition:0.2s;
   }
-  .pass-right {
-    background:#fff;padding:20px;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;
+  .keypad button:active{background:#ff99cc;color:#fff;transform:scale(0.95);}
+  @media (max-width:768px){
+    .pass-box{flex-direction:column;width:90%;}
+    .pass-left img{max-width:180px;}
+    .dots{font-size:20px;}
   }
-  .pass-right h2 {
-    margin:0 0 15px;font-size:20px;color:#ff4d88;text-align:center;
-  }
-  .dots {
-    font-size:26px;letter-spacing:12px;margin-bottom:20px;color:#ff4d88;
-  }
-  .keypad {
-    display:grid;grid-template-columns:repeat(3,1fr);grid-gap:10px;width:100%;
-  }
-  .keypad button {
-    padding:15px;font-size:18px;font-weight:bold;
-    border:none;border-radius:10px;background:#f2f2f2;cursor:pointer;
-    transition:0.2s;
-  }
-  .keypad button:hover {background:#ff99cc;color:#fff;transform:scale(1.05);}
 
-  /* === BOOK SCREEN === */
-  #bookScreen {
-    display:none;justify-content:center;align-items:center;
-    height:100%;padding:10px;
+  /* BOOK (thiệp) */
+  #bookScreen{
+    display:none;justify-content:center;align-items:center;height:100%;width:100%;
     background:linear-gradient(120deg,#ffe6f0,#fff0f6);
   }
-  .book {
-    position:relative;width:100%;max-width:650px;height:420px;perspective:1500px;
+  .book{
+    position:relative;
+    width:min(95vw,720px);
+    height:clamp(360px,70vh,520px);
+    perspective:1500px;
   }
-  .page {
-    position:absolute;top:0;left:0;width:100%;height:100%;
-    border-radius:10px;box-shadow:0 6px 25px rgba(0,0,0,0.25);
+  .page{
+    position:absolute;inset:0;border-radius:14px;
+    /* KHÔNG đổ bóng ở đây để trang trong không lộ */
   }
-  .cover {
+  .cover{
     background:#ffb3c6;display:flex;align-items:center;justify-content:center;
-    font-size:24px;font-weight:bold;cursor:pointer;color:#222;
-    transform-origin:left center;
+    font-size:22px;font-weight:bold;color:#222;cursor:pointer;
+    transform-origin:left center;transition:transform 1s ease;z-index:2;
     backface-visibility:hidden;
-    transition:transform 1s ease;
-    z-index:2;
-    padding:20px;text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.28); /* bóng chỉ cho bìa */
   }
-  .cover.open {transform: rotateY(-100deg);pointer-events:none;}
-  .inner {
-    background:#fff;z-index:1;
-    display:flex;flex-direction:column;justify-content:center;align-items:center;
-    text-align:center;padding:20px;box-sizing:border-box;
-    overflow:auto;
+  .cover.open{transform:rotateY(-100deg);pointer-events:none;}
+  .inner{
+    background:#fff;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;padding:30px;overflow:auto; /* không có box-shadow để khỏi lộ viền khi đóng */
   }
-  .inner h2 {margin:0 0 15px;font-size:28px;color:#ff3366;}
-  .inner p {font-size:16px;line-height:1.6;color:#444;}
-  #closeBtn {
-    margin-top:20px;padding:10px 20px;
-    border:none;border-radius:8px;background:#ff3366;
-    color:#fff;font-size:16px;cursor:pointer;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-    transition:0.3s;
+  .inner h2{margin:0 0 15px;font-size:24px;color:#ff3366;}
+  .inner p{font-size:15px;line-height:1.6;color:#444;}
+  #closeBtn{
+    margin-top:25px;padding:10px 20px;border:none;border-radius:8px;background:#ff3366;color:#fff;font-size:14px;cursor:pointer;
   }
-  #closeBtn:hover {background:#ff004c;transform:scale(1.05);}
+  #closeBtn:active{background:#ff004c;transform:scale(0.95);}
 
-  /* === GALAXY SCREEN === */
-  #canvasScreen {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;}
-  #c {width:100%;height:100%;display:block;}
-
-  @keyframes fadeIn {from{opacity:0;transform:scale(0.9);}to{opacity:1;transform:scale(1);}}
-
-  @media(max-width:600px){
-    .inner h2{font-size:22px;}
-    .inner p{font-size:14px;}
-    .dots{font-size:22px;}
-  }
+  /* GALAXY */
+  #canvasScreen{display:none;position:fixed;inset:0;background:#000;}
+  #c{width:100%;height:100%;display:block;}
 </style>
 </head>
 <body>
-<!-- PASS SCREEN -->
+
+<!-- PASS -->
 <div id="passScreen">
   <div class="pass-box">
-    <div class="pass-left">
-      <img src="anh/anh4.jpg" alt="avatar"/>
-    </div>
+    <div class="pass-left"><img src="anh/anh4.jpg" alt="avatar"></div>
     <div class="pass-right">
       <h2>Xin chào Công chúa Bảo Ngọc 💖</h2>
       <div class="dots" id="dots">****</div>
@@ -125,26 +95,23 @@
   </div>
 </div>
 
-<!-- BOOK SCREEN -->
+<!-- BOOK -->
 <div id="bookScreen">
   <div class="book">
-    <div class="page cover" id="cover"><span>📕 Công chúa hãy mở thiệp đi</span></div>
+    <div class="page cover" id="cover"><span>📖 Công chúa hãy mở thiệp đi</span></div>
     <div class="page inner">
       <h2>🎂 Chúc mừng sinh nhật 🎂</h2>
       <p>
-        Tuổi mới niềm vui mới, hạnh phúc mới và tình yêu vẫn trọn vẹn 💕<br><br>
-        Chúc công chúa <b>Bảo Ngọc</b> hôm nay có một ngày sinh nhật thật đặc biệt,
-        ý nghĩa và tràn ngập niềm vui 🌸<br><br>
-        Mong em sẽ ngày càng xinh đẹp, học giỏi, ngoan ngoãn nghe lời bố mẹ,
-        yêu anh nhiều hơn nữa, và mãi hạnh phúc 💖<br><br>
-        Chúc mừng tuổi 16 của em! <b>HAPPY BIRTHDAY 🎉🎉❤️</b>
+        Chúc công chúa <b>Bảo Ngọc</b> có một ngày sinh nhật thật đặc biệt 🌸<br><br>
+        Mong em luôn xinh đẹp, hạnh phúc, học giỏi và yêu đời 💖<br><br>
+        <b>HAPPY BIRTHDAY 🎉🎉❤️</b>
       </p>
       <button id="closeBtn">✨ Ấn để xem điều bất ngờ ✨</button>
     </div>
   </div>
 </div>
 
-<!-- CANVAS SCREEN -->
+<!-- GALAXY -->
 <div id="canvasScreen">
   <canvas id="c"></canvas>
   <audio id="bg-music" loop>
@@ -173,29 +140,27 @@ const canvasScreen=document.getElementById("canvasScreen");
 const dots=document.getElementById("dots");
 let input="";
 
+/* PASS */
 document.querySelectorAll(".keypad button").forEach(btn=>{
   btn.addEventListener("click",()=>{
     const val=btn.textContent;
-    if(val==="←"){ input=input.slice(0,-1);}
+    if(val==="←"){ input=input.slice(0,-1); }
     else if(val==="✓"){
-      if(input==="17102009"){ 
-        passScreen.style.display="none";bookScreen.style.display="flex";
-      }
-    } else { if(input.length<9) input+=val; }
+      if(input==="17102009"){ passScreen.style.display="none"; bookScreen.style.display="flex"; }
+    } else { if(input.length<8) input+=val; }
     dots.textContent="•".repeat(input.length);
   });
 });
 
-document.getElementById("cover").addEventListener("click",()=>{
-  document.getElementById("cover").classList.add("open");
-});
-
+/* BOOK */
+document.getElementById("cover").addEventListener("click",()=>{ document.getElementById("cover").classList.add("open"); });
 document.getElementById("closeBtn").addEventListener("click",()=>{
   bookScreen.style.display="none";
   canvasScreen.style.display="block";
   initGalaxy();
 });
 
+/* GALAXY */
 function initGalaxy(){
   const canvas=document.getElementById("c");
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
@@ -209,16 +174,19 @@ function initGalaxy(){
   const controls=new OrbitControls(camera,renderer.domElement);
   controls.enableDamping=true;
   controls.autoRotate=true;
-  controls.autoRotateSpeed=0.25;
+  controls.autoRotateSpeed=0.35; /* xoay nhanh nhẹ cho sinh động */
 
+  // Nhạc (mobile cần thao tác 1 lần)
   const bgMusic=document.getElementById("bg-music");
   bgMusic.volume=0.6;
-  function playMusic(){ bgMusic.play().catch(()=>{}); }
-  document.body.addEventListener("click", playMusic, {once:true});
-  document.body.addEventListener("touchstart", playMusic, {once:true});
+  const unlock=()=>bgMusic.play().catch(()=>{});
+  document.body.addEventListener("click",unlock,{once:true});
+  document.body.addEventListener("touchstart",unlock,{once:true});
 
-  const stars=new Float32Array(10000*3);
-  for(let i=0;i<10000;i++){
+  // Stars (giảm tải trên mobile)
+  const starCount=(window.innerWidth<768?3500:8000);
+  const stars=new Float32Array(starCount*3);
+  for(let i=0;i<starCount;i++){
     stars[i*3]=(Math.random()-0.5)*12000;
     stars[i*3+1]=(Math.random()-0.5)*12000;
     stars[i*3+2]=(Math.random()-0.5)*12000;
@@ -227,40 +195,21 @@ function initGalaxy(){
   starGeo.setAttribute("position",new THREE.BufferAttribute(stars,3));
   scene.add(new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xffffff,size:1})));
 
+  // Light
   scene.add(new THREE.AmbientLight(0xffffff,1.2));
   const light=new THREE.PointLight(0xffffff,3,8000);
   light.position.set(0,1000,1500);
   scene.add(light);
 
+  // Cake
   const cake=new THREE.Group(); scene.add(cake);
-  cake.add(new THREE.Mesh(new THREE.CylinderGeometry(300,300,120,64),
-    new THREE.MeshPhongMaterial({color:0xfff59d,shininess:400,specular:0xffffff})));
-  const mid=new THREE.Mesh(new THREE.CylinderGeometry(220,220,100,64),
-    new THREE.MeshPhongMaterial({color:0xff80ab,shininess:400,specular:0xffffff}));
+  cake.add(new THREE.Mesh(new THREE.CylinderGeometry(300,300,120,64),new THREE.MeshPhongMaterial({color:0xfff59d})));
+  const mid=new THREE.Mesh(new THREE.CylinderGeometry(220,220,100,64),new THREE.MeshPhongMaterial({color:0xff80ab}));
   mid.position.y=110; cake.add(mid);
-  const top=new THREE.Mesh(new THREE.CylinderGeometry(140,140,80,64),
-    new THREE.MeshPhongMaterial({color:0xba68c8,shininess:400,specular:0xffffff}));
+  const top=new THREE.Mesh(new THREE.CylinderGeometry(140,140,80,64),new THREE.MeshPhongMaterial({color:0xba68c8}));
   top.position.y=200; cake.add(top);
 
-  function addCream(radius,y){
-    const cream=new THREE.Mesh(new THREE.TorusGeometry(radius,12,16,100),
-      new THREE.MeshPhongMaterial({color:0xffffff,shininess:300,specular:0xffffff}));
-    cream.rotation.x=Math.PI/2; cream.position.y=y; cake.add(cream);
-  }
-  addCream(300,60); addCream(220,160); addCream(140,240);
-
-  const flames=[];
-  for(let i=0;i<8;i++){
-    const candle=new THREE.Mesh(new THREE.CylinderGeometry(10,10,60,16),
-      new THREE.MeshPhongMaterial({color:0xffffff,shininess:200}));
-    const angle=i*Math.PI/4;
-    candle.position.set(Math.cos(angle)*100,260,Math.sin(angle)*100);
-    cake.add(candle);
-    const flame=new THREE.Mesh(new THREE.SphereGeometry(14,16,16),
-      new THREE.MeshBasicMaterial({color:0xfff176,transparent:true,opacity:0.95}));
-    flame.position.y=35; candle.add(flame); flames.push(flame);
-  }
-
+  // Hearts
   const heartShape=new THREE.Shape();
   heartShape.moveTo(0,0);
   heartShape.bezierCurveTo(0,0,-10,-10,-25,0);
@@ -270,48 +219,76 @@ function initGalaxy(){
   const heartGeo=new THREE.ShapeGeometry(heartShape);
   const heartMat=new THREE.MeshBasicMaterial({color:0xff4081,side:THREE.DoubleSide});
   const hearts=[];
-  for(let i=0;i<25;i++){
-    const mesh=new THREE.Mesh(heartGeo,heartMat);
-    const s=0.25+Math.random()*0.25;
-    mesh.scale.set(s,s,s);
-    mesh.position.set((Math.random()-0.5)*2000,-200,(Math.random()-0.5)*2000);
-    hearts.push(mesh); scene.add(mesh);
+  for(let i=0;i<20;i++){
+    const m=new THREE.Mesh(heartGeo,heartMat);
+    const s=0.3+Math.random()*0.3;
+    m.scale.set(s,s,s);
+    m.position.set((Math.random()-0.5)*2000,-200,(Math.random()-0.5)*2000);
+    hearts.push(m); scene.add(m);
   }
 
+  // Avatar belt
+  const avatarUrls=["anh/anh1.jpg","anh/anh2.jpg","anh/anh3.jpg","anh/anh4.jpg","anh/anh5.jpg","anh/anh6.jpg","anh/anh7.jpg","anh/anh8.jpg","anh/anh9.jpg","anh/anh10.jpg"];
+  const loader=new THREE.TextureLoader();
+  const belt=new THREE.Group(); scene.add(belt);
+  const textures=avatarUrls.map(url=>loader.load(url));
+  const count=(window.innerWidth<768?60:120);
+  for(let i=0;i<count;i++){
+    const tex=textures[i%textures.length];
+    const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true}));
+    const size=60+Math.random()*40; sp.scale.set(size,size,1);
+    const r=1100+Math.random()*300, a=Math.random()*Math.PI*2, y=(Math.random()-0.5)*300;
+    sp.position.set(Math.cos(a)*r,y,Math.sin(a)*r);
+    sp.userData={r,angle:a,speed:0.001+Math.random()*0.001};
+    belt.add(sp);
+  }
+
+  // Banner chữ – tăng tốc xuất hiện
   const fontLoader=new FontLoader();
-  fontLoader.load("https://threejs.org/examples/fonts/optimer_bold.typeface.json",function(font){
+  fontLoader.load("https://threejs.org/examples/fonts/optimer_bold.typeface.json",(font)=>{
     const text="HAPPY BIRTHDAY";
-    const radius=window.innerWidth<600?700:1000; 
-    const centerY=window.innerWidth<600?800:1000;
-    const size=window.innerWidth<600?60:100;
-    const totalAngle=Math.PI/1.2;
-    const startAngle=-totalAngle/2;
+    const radius=900, centerY=1000, totalAngle=Math.PI/1.2, startAngle=-totalAngle/2;
+    const perLetterDelay=10;      // ms
+    const alphaStep=0.6;          // tăng nhanh độ mờ
+
     for(let i=0;i<text.length;i++){
-      const geo=new TextGeometry(text[i],{font:font,size:size,height:20});
+      const geo=new TextGeometry(text[i],{font,size:90,height:20});
       const mat=new THREE.MeshPhongMaterial({color:0xffffff,emissive:0xff66cc,transparent:true,opacity:0});
       const mesh=new THREE.Mesh(geo,mat);
       const angle=startAngle+(i/(text.length-1))*totalAngle;
-      const x=Math.cos(angle)*radius; const z=Math.sin(angle)*radius;
-      mesh.position.set(x,centerY,z);
-      mesh.lookAt(camera.position.x,centerY,camera.position.z);
+      mesh.position.set(Math.cos(angle)*radius,centerY,Math.sin(angle)*radius);
+      mesh.lookAt(0,centerY,0);
       scene.add(mesh);
-      setTimeout(()=>{ let alpha=0; function fadeIn(){alpha+=0.05;mesh.material.opacity=alpha;if(alpha<1) requestAnimationFrame(fadeIn);} fadeIn(); }, i*200);
+
+      setTimeout(()=>{
+        let a=0;
+        (function fade(){
+          a+=alphaStep; mesh.material.opacity=a;
+          if(a<1) requestAnimationFrame(fade);
+        })();
+      }, i*perLetterDelay);
     }
   });
 
   function animate(){
     requestAnimationFrame(animate);
     cake.rotation.y+=0.002;
-    flames.forEach((fl,i)=>{ fl.scale.setScalar(1+0.2*Math.sin(Date.now()*0.01+i)); fl.material.opacity=0.8+0.2*Math.sin(Date.now()*0.02+i); });
-    hearts.forEach(h=>{ h.position.y+=2; if(h.position.y>1500) h.position.y=-200; h.rotation.z+=0.02; });
-    controls.update(); renderer.render(scene,camera);
+    hearts.forEach(h=>{h.position.y+=2; if(h.position.y>1500) h.position.y=-200; h.rotation.z+=0.02;});
+    belt.children.forEach(sp=>{
+      sp.userData.angle+=sp.userData.speed;
+      sp.position.x=Math.cos(sp.userData.angle)*sp.userData.r;
+      sp.position.z=Math.sin(sp.userData.angle)*sp.userData.r;
+    });
+    controls.update();
+    renderer.render(scene,camera);
   }
   animate();
 
-  window.addEventListener("resize",()=>{ 
-    renderer.setSize(window.innerWidth,window.innerHeight); 
-    camera.aspect=window.innerWidth/window.innerHeight; 
-    camera.updateProjectionMatrix(); 
+  // resize + xoay ngang
+  window.addEventListener("resize",()=>{
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
   });
 }
 </script>
